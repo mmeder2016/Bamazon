@@ -41,14 +41,15 @@ INSERT INTO departments (department_name, over_head_costs, total_sales) VALUES
 
 /* QUERY 4 */
 /* Show all fields except department_name*/
-DROP VIEW manager_products_for_sale;
+/*DROP VIEW manager_products_for_sale;
 CREATE VIEW manager_products_for_sale AS
 SELECT item_id, product_name, price, stock_quantity FROM products ORDER BY item_id;
+*/
 
 /* QUERY 5 */
 DROP VIEW manager_low_inventory;
 CREATE VIEW manager_low_inventory AS
-SELECT * FROM manager_products_for_sale WHERE stock_quantity<5 ORDER BY stock_quantity;
+SELECT * FROM products WHERE stock_quantity<5 ORDER BY stock_quantity;
 
 /* QUERY 8 */
 ALTER TABLE products ADD product_sales DECIMAL(10,2) DEFAULT 0;

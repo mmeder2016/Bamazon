@@ -20,10 +20,6 @@ try {
     console.log("Exception caught: " + err);
 }
 
-
-//connection.end();
-
-
 var getPurchase = function() {
     connection.query("SELECT * FROM products", function(err, res) {
         if (err)
@@ -47,8 +43,8 @@ var getPurchase = function() {
         }];
         inquirer.prompt(questions).then(function(user) {
             var department_name = '';
-            var department_id = 0;
             var total_sale = 0;
+
             // Check quantities avaliable to see if we can proceed with purchase
             var proceed = false;
             for (var i = 0; i < res.length; i++) {
@@ -61,33 +57,44 @@ var getPurchase = function() {
                 }
             }
             if (proceed) {
+                var department_id = 0;
+                // Update the stock quantity in the products table.
                 var query1 = "UPDATE products SET stock_quantity=stock_quantity-? WHERE item_id=?";
                 connection.query(query1, [user.quantity, user.item_id], function(err, res) {
-                    if (err)
+                    if (err) {
                         throw err;
-                    if (res.changedRows === 1)
-                        console.log("Transaction successfully proceeded");
+                    }
+                    // If we successfully changed a row.
+                    if (res.changedRows === 1) {
+                        // Set department_id by department name
+                        var query2 = "SELECT department_id FROM departments WHERE department_name=?";
+                        connection.query(query2, [department_name], function(err, res) {
+                            if (err) {
+                                throw err;
+                            } else {
+                                department_id = res[0].department_id;
+                                // UPDATE total_sales in departments table
+                                var query3 = "UPDATE departments SET total_sales=total_sales+? WHERE department_id=?";
+                                connection.query(query3, [total_sale, department_id], function(err, res) {
+                                    if (err) {
+                                        throw err;
+                                    }
+                                    if (res.changedRows === 1) {
+                                        console.log("Updated departments total_sales");
+                                        queryShowProducts();
+                                        queryShowDepartments();
+                                        connection.end();
+                                    }
+                                    else {
+                                        throw("ROW DID NOT CHANGE Update departments total_sales");
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        throw "Failed to update stock_quantity in products table";
+                    }
                 });
-                // Get depatment_id
-                var query2 = "SELECT department_id FROM departments WHERE department_name=?";
-                connection.query(query2, [department_name], function(err, res) {
-                    if (err)
-                        throw err;
-                    department_id = res[0].department_id;
-                });
-                // UPDATE total_sales in departments table
-                var query3 = "UPDATE departments SET total_sales=total_sales+? WHERE department_id=?";
-                connection.query(query3, [total_sale, department_id], function(err, res) {
-                    if (err)
-                        throw err;
-                    if (res.changedRows === 1)
-                        console.log("Updated departments total_sales");
-                    queryShowProducts();
-                    queryShowDepartments();
-
-                    console.log(res);
-                });
-
             } else {
                 console.log("Insufficient quantities in stock!");
                 getPurchase();
