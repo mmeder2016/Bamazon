@@ -35,9 +35,9 @@ INSERT INTO products (department_name, product_name, price, stock_quantity) VALU
 
 INSERT INTO departments (department_name, over_head_costs, total_sales) VALUES 
 ("Books", 0, 0),
-("Gift Cards", 0, 0),
-("Health and Household", 0, 0),
-("Clothing", 0, 0);
+("Gift", 0, 0),
+("House", 0, 0),
+("Shoes", 0, 0);
 
 /* QUERY 4 */
 /* Show all fields except department_name*/

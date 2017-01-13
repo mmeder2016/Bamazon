@@ -24,14 +24,7 @@ var getPurchase = function() {
     connection.query("SELECT * FROM products", function(err, res) {
         if (err)
             throw err;
-        // Keep total chars/line < 80 
-        for (var i = 0; i < res.length; i++) {
-            console.log(pad(res[i].item_id, 3) + // 3 chars
-                pad(res[i].department_name, 6) + // 6 chars
-                pad(res[i].product_name, 46) + // 48 chars
-                ' $' + pad(res[i].price, 5) + " (" + // 9 chars
-                pad(res[i].stock_quantity, 4) + " available)"); // 15 chars
-        }
+        printProducts(res);
         var questions = [{
             type: "input",
             message: "What number item do you wish to purchase?",
@@ -59,13 +52,17 @@ var getPurchase = function() {
             if (proceed) {
                 var department_id = 0;
                 // Update the stock quantity in the products table.
-                var query1 = "UPDATE products SET stock_quantity=stock_quantity-? WHERE item_id=?";
-                connection.query(query1, [user.quantity, user.item_id], function(err, res) {
+                //var query1 = "UPDATE products SET stock_quantity=stock_quantity-? WHERE item_id=?";
+                // Also UPDATE product sales in products table
+                var query1 = "UPDATE products SET stock_quantity=stock_quantity-?, product_sales=product_sales+(price*?) WHERE item_id=?";
+                connection.query(query1, [user.quantity, user.quantity, user.item_id], function(err, res) {
                     if (err) {
                         throw err;
                     }
                     // If we successfully changed a row.
                     if (res.changedRows === 1) {
+                        // Report the total sale to the user.
+                        console.log("The cost of the total sale is $" + total_sale);
                         // Set department_id by department name
                         var query2 = "SELECT department_id FROM departments WHERE department_name=?";
                         connection.query(query2, [department_name], function(err, res) {
@@ -80,13 +77,9 @@ var getPurchase = function() {
                                         throw err;
                                     }
                                     if (res.changedRows === 1) {
-                                        console.log("Updated departments total_sales");
-                                        queryShowProducts();
-                                        queryShowDepartments();
                                         connection.end();
-                                    }
-                                    else {
-                                        throw("ROW DID NOT CHANGE Update departments total_sales");
+                                    } else {
+                                        throw ("ROW DID NOT CHANGE Update departments total_sales");
                                     }
                                 });
                             }
@@ -103,37 +96,17 @@ var getPurchase = function() {
     });
 };
 
-function queryShowProducts() {
-    var query = "SELECT * FROM products";
-    connection.query(query, function(err, res) {
-        if (err)
-            throw err;
-        // Keep total chars/line < 80 
-        for (var i = 0; i < res.length; i++) {
-            console.log(pad(res[i].item_id, 3) + // 3 chars
-                pad(res[i].department_name, 6) + // 6 chars
-                pad(res[i].product_name, 46) + // 48 chars
-                ' $' + pad(res[i].price, 5) + " (" + // 9 chars
-                pad(res[i].stock_quantity, 4) + " available)"); // 15 chars
-        }
-    });
+function printProducts(res) {
+    console.log("\n" + " ID  DEPT                                  PRODUCT NAME    PRICE STOCK");
+    for (var i = 0; i < res.length; i++) {
+        console.log(pad(res[i].item_id, 3) + // 3 chars
+            pad(res[i].department_name, 6) + // 6 chars
+            pad(res[i].product_name, 46) + // 48 chars
+            ' $' + pad(res[i].price, 7) + " " + // 9 chars
+            pad(res[i].stock_quantity, 5)); // 5 chars
+    }
 }
 
-function queryShowDepartments() {
-    var query = "SELECT * FROM departments";
-    connection.query(query, function(err, res) {
-        if (err)
-            throw err;
-        // Keep total chars/line < 80 
-        console.log("\n" + " dept id                       dept name  oh costs tot sales");
-        for (var i = 0; i < res.length; i++) {
-            console.log(pad(res[i].department_id, 8) + // 3 chars
-                pad(res[i].department_name, 32) + // 6 chars
-                ' $' + pad(res[i].over_head_costs, 8) + // 8 chars
-                ' $' + pad(res[i].total_sales, 8)); // 9 chars
-        }
-    });
-}
 // pad (prepend) a number or string with spaces
 // v -value (number or string)
 // w -width
