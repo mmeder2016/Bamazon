@@ -13,7 +13,6 @@ try {
     connection.connect(function(err) {
         if (err)
             throw err;
-        console.log("connection as id: " + connection.threadId);
         getPurchase();
     });
 } catch (err) {
@@ -104,6 +103,7 @@ var getPurchase = function() {
     });
 };
 
+// Print and format the results of a SELECT * FROM products
 function printProducts(res) {
     console.log("\n" + " ID  DEPT                                  PRODUCT NAME    PRICE STOCK");
     for (var i = 0; i < res.length; i++) {

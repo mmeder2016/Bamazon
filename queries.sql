@@ -69,7 +69,11 @@ SELECT item_id, product_name, price, stock_quantity FROM products ORDER BY item_
 SELECT * FROM manager_products_for_sale;
 
 SELECT * FROM departments
+SELECT * FROM products
 
-SELECT department_id, department_name, (over_head_costs-total_sales) AS total_profit 
+SELECT department_id, department_name, (total_sales-over_head_costs) AS total_profit 
 FROM departments;
+
+
+
 

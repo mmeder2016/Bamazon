@@ -1,0 +1,27 @@
+{
+  "name": "bamazon",
+  "version": "1.0.0",
+  "description": "Three node javascript programs to simulate an online retailer which interact with a mysql database.",
+  "main": "bamazonCustomer.js",
+  "dependencies": {
+    "inquirer": "^2.0.0",
+    "mysql": "^2.12.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mmeder2016/Bamazon.git"
+  },
+  "keywords": [
+    "bamazon"
+  ],
+  "author": "Michael Meder",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mmeder2016/Bamazon/issues"
+  },
+  "homepage": "https://github.com/mmeder2016/Bamazon#readme"
+}

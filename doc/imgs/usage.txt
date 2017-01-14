@@ -1,0 +1,29 @@
+bamazonCustomer.js
+  Initial Database “products” (1002.bmp)
+  Initial database “departments” (1003.bmp)
+
+  1.) Purchase a product
+        Verify it informs the user of the total cost. (1004.bmp)
+        Verify the “products” table after purchase. 3x10.44 = 31.32 (1007.bmp)
+        Verify the “departments” table after the purchase (1008.bmp)
+  2.) Attempt to purchase more of a product than is in stock. (2001.bmp)
+        Ensure it is not allowed and returns you to choose again.
+  3.) Attempt to purchase a non-existent product id. (2002.bmp)
+
+bamazonManager.js 
+  1.) View Products for Sale (Note Item 7 has 12 in stock) (3001.bmp) 
+  2.) View Low Inventory (3002.bmp)
+  3.) Add to Inventory (3003.bmp)
+        Item 7 now has 17 in stock)
+  4.) Add New Product (3004.bmp)
+        “products” database (3005.bmp)
+ 
+bamazonSupervisor
+  1.) The tables (4001.bmp)
+        “departments” table (4002.bmp)
+        Custom alias query (4003.bmp)
+  2.) Adding a new department (5001.bmp)
+ 
+Using it for a while
+  After playing with making more purchases and adding new products 
+  to the Meat department, I now have the below. (6001.bmp)

@@ -13,7 +13,6 @@ try {
     connection.connect(function(err) {
         if (err)
             throw err;
-        console.log("connection as id: " + connection.threadId);
         getManagerOptions();
     });
 } catch (err) {
@@ -21,6 +20,7 @@ try {
 }
 
 var getManagerOptions = function() {
+    // Questions for the initial choice
     var choice_questions = [{
         type: "list",
         message: "What would you like to do?",
@@ -31,6 +31,7 @@ var getManagerOptions = function() {
             "Add New Product"
         ]
     }];
+    // Questions for adding a new product
     var new_product_questions = [{
         type: "input",
         message: "What is the product name?",
@@ -130,8 +131,8 @@ var getManagerOptions = function() {
     });
 };
 
+// Print and format the results of a SELECT * FROM products
 function printProducts(res) {
-    //console.log(res);
     console.log("\n" + " ID  DEPT                                  PRODUCT NAME    PRICE STOCK    SALES");
     for (var i = 0; i < res.length; i++) {
         console.log(pad(res[i].item_id, 3) + // 3 chars
