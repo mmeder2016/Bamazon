@@ -56,11 +56,11 @@ SELECT department_id FROM departments WHERE department_name=(SELECT department_n
 UPDATE departments 
 SET departments.total_sales=departments.total_sales+8888 
 WHERE department_id=1;
-
+/*
 UPDATE departments 
 SET total_sales=total_sales+8888 
 WHERE department_id=(SELECT department_id FROM departments WHERE department_name="Books");
-
+*/
 
 /* QUERY 10 */
 /* Show all fields except department_name*/

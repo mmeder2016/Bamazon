@@ -131,13 +131,15 @@ var getManagerOptions = function() {
 };
 
 function printProducts(res) {
-    console.log("\n" + " ID  DEPT                                  PRODUCT NAME    PRICE STOCK");
+    //console.log(res);
+    console.log("\n" + " ID  DEPT                                  PRODUCT NAME    PRICE STOCK    SALES");
     for (var i = 0; i < res.length; i++) {
         console.log(pad(res[i].item_id, 3) + // 3 chars
             pad(res[i].department_name, 6) + // 6 chars
-            pad(res[i].product_name, 46) + // 46 chars
-            ' $' + pad(res[i].price, 7) + " " + // 8 chars
-            pad(res[i].stock_quantity, 5)); // 5 chars
+            pad(res[i].product_name, 46) + // 48 chars
+            ' $' + pad(res[i].price, 7) + " " + // 9 chars
+            pad(res[i].stock_quantity, 5) + " " +
+            pad(res[i].product_sales, 8)); // 5 chars
     }
 }
 

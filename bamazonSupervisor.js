@@ -29,95 +29,39 @@ var getManagerOptions = function() {
             "Create New Department"
         ]
     }];
-    var new_product_questions = [{
+    var add_department_questions = [{
         type: "input",
-        message: "What is the product name?",
-        name: "product_name"
-    }, {
-        type: "input",
-        message: "What department name?",
+        message: "What is the name of the department?",
         name: "department_name"
     }, {
         type: "input",
-        message: "What will be the price?",
-        name: "price"
-    }, {
-        type: "input",
-        message: "What quantity will be in stock?",
-        name: "stock_quantity"
-    }];
-    var add_inventory_questions = [{
-        type: "input",
-        message: "What is the item id ?",
-        name: "item_id"
-    }, {
-        type: "input",
-        message: "How many to add to inventory?",
-        name: "quantity"
+        message: "What are the overhead costs?",
+        name: "over_head_costs"
     }];
 
     inquirer.prompt(choice_questions).then(function(user) {
         switch (user.choice) {
-            case "View Products for Sale":
+            case "View Products Sales by Department":
                 {
-                    var query1 = "SELECT * FROM products";
+                    var query1 = "SELECT * FROM departments";
                     connection.query(query1, function(err, res) {
                         if (err) {
                             throw err;
                         }
-                        printProducts(res);
+                        printDepartments(res);
                         connection.end();
                     });
                     break;
                 }
-            case "View Low Inventory":
+            case "Create New Department":
                 {
-                    var query2 = "SELECT * FROM manager_low_inventory;";
-                    connection.query(query2, function(err, res) {
-                        if (err) {
-                            throw err;
-                        }
-                        printProducts(res);
-                        connection.end();
-                    });
-                    break;
-                }
-            case "Add to Inventory":
-                {
-                    inquirer.prompt(add_inventory_questions).then(function(inv) {
-                        var query3 = "UPDATE products SET stock_quantity=stock_quantity+? WHERE item_id=?";
-                        connection.query(query3, [inv.quantity, inv.item_id], function(err, res) {
+                    inquirer.prompt(add_department_questions).then(function(dept) {
+                        var query2 = "INSERT INTO departments (department_name, over_head_costs, total_sales) VALUES (?,?,?)";
+                        connection.query(query2, [dept.department_name, dept.over_head_costs, 0], function(err, res) {
                             if (err) {
                                 throw err;
                             }
-                            var query4 = "SELECT * FROM products";
-                            connection.query(query4, function(err, res) {
-                                if (err) {
-                                    throw err;
-                                }
-                                printProducts(res);
-                                connection.end();
-                            });
-                        });
-                    });
-                    break;
-                }
-            case "Add New Product":
-                {
-                    inquirer.prompt(new_product_questions).then(function(prod) {
-                        var query5 = "INSERT INTO products (product_name, department_name, price, stock_quantity) VALUES (?,?,?,?);";
-                        connection.query(query5, [prod.product_name, prod.department_name, prod.price, prod.stock_quantity], function(err, res) {
-                            if (err) {
-                                throw err;
-                            }
-                            var query6 = "SELECT * FROM products";
-                            connection.query(query6, function(err, res) {
-                                if (err) {
-                                    throw err;
-                                }
-                                printProducts(res);
-                                connection.end();
-                            });
+                            connection.end();
                         });
                     });
                     break;
@@ -128,15 +72,13 @@ var getManagerOptions = function() {
     });
 };
 
-function printProducts(res) {
-    console.log("\n" + " ID  DEPT                                  PRODUCT NAME    PRICE STOCK    SALES");
+function printDepartments(res) {
+    console.log("\n" + " DEPT ID DEPT NAME   O/H COSTS   TOT SALES");
     for (var i = 0; i < res.length; i++) {
-        console.log(pad(res[i].item_id, 3) + // 3 chars
-            pad(res[i].department_name, 6) + // 6 chars
-            pad(res[i].product_name, 46) + // 48 chars
-            ' $' + pad(res[i].price, 7) + " " + // 9 chars
-            pad(res[i].stock_quantity, 5) + " "+
-            pad(res[i].product_sales, 8)); // 5 chars
+        console.log(pad(res[i].department_id, 8) + // 3 chars
+            pad(res[i].department_name, 10) + // 16 chars
+            ' $' + pad(res[i].over_head_costs, 10) + // 8 chars
+            ' $' + pad(res[i].total_sales, 10)); // 9 chars
     }
 }
 

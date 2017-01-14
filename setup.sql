@@ -34,10 +34,10 @@ INSERT INTO products (department_name, product_name, price, stock_quantity) VALU
 ("Gift", "Amazon Gift Card Christmas Tree", 100.00, 5);
 
 INSERT INTO departments (department_name, over_head_costs, total_sales) VALUES 
-("Books", 0, 0),
-("Gift", 0, 0),
-("House", 0, 0),
-("Shoes", 0, 0);
+("Books", 6700, 0),
+("Gift", 8500, 0),
+("House", 9000, 0),
+("Shoes", 7500, 0);
 
 /* QUERY 4 */
 /* Show all fields except department_name*/
@@ -46,11 +46,11 @@ CREATE VIEW manager_products_for_sale AS
 SELECT item_id, product_name, price, stock_quantity FROM products ORDER BY item_id;
 */
 
+/* QUERY 8 */ /**/
+ALTER TABLE products ADD product_sales DECIMAL(10,2) DEFAULT 0;
+/* Possibly trigger addition of price on decrement of stock_quantity*/
+
 /* QUERY 5 */
 DROP VIEW manager_low_inventory;
 CREATE VIEW manager_low_inventory AS
 SELECT * FROM products WHERE stock_quantity<5 ORDER BY stock_quantity;
-
-/* QUERY 8 */
-ALTER TABLE products ADD product_sales DECIMAL(10,2) DEFAULT 0;
-/* Possibly trigger addition of price on decrement of stock_quantity*/
