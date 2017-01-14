@@ -68,5 +68,8 @@ CREATE VIEW manager_product_sales_by_department AS
 SELECT item_id, product_name, price, stock_quantity FROM products ORDER BY item_id;
 SELECT * FROM manager_products_for_sale;
 
-DELETE FROM products WHERE item_id=11
+SELECT * FROM departments
+
+SELECT department_id, department_name, (over_head_costs-total_sales) AS total_profit 
+FROM departments;
 

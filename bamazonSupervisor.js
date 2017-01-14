@@ -26,6 +26,7 @@ var getManagerOptions = function() {
         message: "What would you like to do?",
         name: "choice",
         choices: ["View Products Sales by Department",
+            "View Total Profit",
             "Create New Department"
         ]
     }];
@@ -41,6 +42,7 @@ var getManagerOptions = function() {
 
     inquirer.prompt(choice_questions).then(function(user) {
         switch (user.choice) {
+
             case "View Products Sales by Department":
                 {
                     var query1 = "SELECT * FROM departments";
@@ -49,6 +51,18 @@ var getManagerOptions = function() {
                             throw err;
                         }
                         printDepartments(res);
+                        connection.end();
+                    });
+                    break;
+                }
+            case "View Total Profit":
+                {
+                    var query3 = "SELECT department_id, department_name, (total_sales-over_head_costs) AS total_profit FROM departments;";
+                    connection.query(query3, function(err, res) {
+                        if (err) {
+                            throw err;
+                        }
+                        printTotalProfit(res);
                         connection.end();
                     });
                     break;
@@ -71,6 +85,15 @@ var getManagerOptions = function() {
         }
     });
 };
+
+function printTotalProfit(res) {
+    console.log("\n" + " DEPT ID DEPT NAME  TOT PROFIT");
+    for (var i = 0; i < res.length; i++) {
+        console.log(pad(res[i].department_id, 8) + // 3 chars
+            pad(res[i].department_name, 10) + // 16 chars
+            ' $' + pad(res[i].total_profit, 10)); // 9 chars
+    }
+}
 
 function printDepartments(res) {
     console.log("\n" + " DEPT ID DEPT NAME   O/H COSTS   TOT SALES");

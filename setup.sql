@@ -34,10 +34,10 @@ INSERT INTO products (department_name, product_name, price, stock_quantity) VALU
 ("Gift", "Amazon Gift Card Christmas Tree", 100.00, 5);
 
 INSERT INTO departments (department_name, over_head_costs, total_sales) VALUES 
-("Books", 6700, 0),
-("Gift", 8500, 0),
-("House", 9000, 0),
-("Shoes", 7500, 0);
+("Books", 67, 0),
+("Gift", 185, 0),
+("House", 190, 0),
+("Shoes", 175, 0);
 
 /* QUERY 4 */
 /* Show all fields except department_name*/
